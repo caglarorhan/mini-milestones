@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>mini-milestones</title>
+
+    <link rel="stylesheet" href="./css/materialize.min.css">
+</head>
+<body>
+<div class="container">
+
+<div class="row">
+    <div class="input-field col s6 left-align">
+        <input type="text" id="autocompleteRoadName" class="autocomplete">
+        <label for="autocompleteRoadName">Road name search-select</label>
+    </div>
+    <div class="col s6 right-align">
+<button class="waves-effect waves-light btn modal-trigger btn-small" id="createNewRoadButton" data-target="roadCreatorForm">New Road</button>
+
+
+    </div>
+</div>
+<div class="row" style="border:1px solid lightgrey; height: 90vh">
+    <div class="col" id="theRoadDiv">
+
+    </div>
+</div>
+
+</div>
+
+<!-- Modal Structure -->
+<div id="roadCreatorForm" class="modal">
+    <div class="modal-content">
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input type="text" id="newRoadName">
+                        <label for="newRoadName">Gimme a road name</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="waves-effect waves-green btn-flat" id="createNewRoad">Create</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn-flat">Forget it!</a>
+    </div>
+</div>
+
+<script src="./js/materialize.min.js" ></script>
+<script src="./js/mini-milestone.js" ></script>
+</body>
+</html>
