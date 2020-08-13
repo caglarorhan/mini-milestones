@@ -52,11 +52,11 @@ function createNewRoad(){
 function drawRoadMap(){
     roadName = cE('autocompleteRoadName').value
     let roadMap = cE('theRoadDiv');
-    roadMap.innerHTML+=`<h4>${roadName}</h4>`;
+    roadMap.innerHTML+=`<h4><i class="material-icons">all_inclusive</i> ${roadName} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons">add</i></button></h4>`;
     Object.entries(state.roads[roadName]).forEach(
         (key,val)=>{
         roadMap.innerHTML+=`
-        <div>${key}:${val}</div>
+        <div><i class="material-icons">assistant_photo</i>${key} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons">add</i></button></div>
         `
     }
     )
