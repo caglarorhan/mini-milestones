@@ -1,8 +1,20 @@
-const state = {
+const wlS = window.localStorage;
+
+wlS.setItem('state',JSON.stringify({
     roads:{},
     modals:{},
     autocompletes:{}
-};
+}));
+
+let state = new Proxy(JSON.parse(wlS.getItem('state')),{
+    get: (target,prop)=>{
+       return target[prop];
+    },
+    set: (target,prop,value)=>{
+        target[prop]=value;
+        wlS.setItem('state',JSON.stringify(target));
+    }
+});
 
 window.addEventListener('load',fullyLoaded);
 
@@ -16,8 +28,6 @@ function fullyLoaded(){
 
     //check localStorage and sync before here
     cE('createNewRoadButton').addEventListener('click',createNewRoadModal);
-    cE('createNewRoad').addEventListener('click',createNewRoad);
-
     state.autocompletes['autocompleteRoadName'] =  M.Autocomplete.init(cE('autocompleteRoadName'), {onAutocomplete: drawRoadMap});
 
 }
@@ -25,7 +35,15 @@ function fullyLoaded(){
 function createNewRoadModal(){
     state.modals['roadCreatorForm'] = M.Modal.init(cE('roadCreatorForm'), {});
     state.modals['roadCreatorForm'].open();
-    updateRoadSearchData();
+    cE('createNewRoad').addEventListener('click',createNewRoad);
+
+}
+
+function createMileStoneModal(e){
+    let roadName = e.target.dataset['map'];
+    state.modals['milestoneCreatorForm'] = M.Modal.init(cE('milestoneCreatorForm'),{});
+    state.modals['milestoneCreatorForm'].open();
+    cE('createNewMileStone').addEventListener('click', createNewMileStone);
 }
 
 function createNewRoad(){
@@ -43,21 +61,25 @@ function createNewRoad(){
         updateRoadSearchData();
     }
 
-    console.log(state);
     newRoadName.value='';
     state.modals['roadCreatorForm'].destroy();
 }
 
+function createNewMileStone(e){
+ let source = e.target;
+
+}
 
 function drawRoadMap(){
-    roadName = cE('autocompleteRoadName').value
+    let roadName = cE('autocompleteRoadName').value
     let roadMap = cE('theRoadDiv');
-    roadMap.innerHTML+=`<h4><i class="material-icons">all_inclusive</i> ${roadName} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons">add</i></button></h4>`;
+    roadMap.innerHTML+=`<h4><i class="material-icons">all_inclusive</i> ${roadName} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons addStoneButton" data-map="${roadName}">add</i></button></h4>`;
     Object.entries(state.roads[roadName]).forEach(
         (key,val)=>{
         roadMap.innerHTML+=`
-        <div><i class="material-icons">assistant_photo</i>${key} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons">add</i></button></div>
-        `
+        <div><i class="material-icons">assistant_photo</i>${key} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons addStoneButton" data-map="${roadName},${key}">add</i></button></div>
+        `;
+        roadMap.querySelector(`.addStoneButton`).addEventListener('click',createMileStoneModal)
     }
     )
 }
