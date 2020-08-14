@@ -40,10 +40,11 @@ function createNewRoadModal(){
 }
 
 function createMileStoneModal(e){
-    let roadName = e.target.dataset['map'];
+    let map = e.target.dataset.map.split(",");
     state.modals['milestoneCreatorForm'] = M.Modal.init(cE('milestoneCreatorForm'),{});
     state.modals['milestoneCreatorForm'].open();
     cE('createNewMileStone').addEventListener('click', createNewMileStone);
+    cE('map').value=map.join(",");
 }
 
 function createNewRoad(){
@@ -65,23 +66,26 @@ function createNewRoad(){
     state.modals['roadCreatorForm'].destroy();
 }
 
-function createNewMileStone(e){
- let source = e.target;
-
+function createNewMileStone(){
+    let newMileStoneName = cE('newMileStoneName');
+    let map = cE('map').value.split(",");
+    state.roads[map[0]][map[1]]=null;
+    drawRoadMap(map[0]);
 }
 
-function drawRoadMap(){
-    let roadName = cE('autocompleteRoadName').value
+function drawRoadMap(roadname){
+    let roadName = roadname || cE('autocompleteRoadName').value;
     let roadMap = cE('theRoadDiv');
-    roadMap.innerHTML+=`<h4><i class="material-icons">all_inclusive</i> ${roadName} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons addStoneButton" data-map="${roadName}">add</i></button></h4>`;
+    roadMap.innerHTML=`<h4><i class="material-icons">all_inclusive</i> ${roadName} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons addStoneButton" data-map="${roadName}">add</i></button></h4>`;
     Object.entries(state.roads[roadName]).forEach(
         (key,val)=>{
         roadMap.innerHTML+=`
         <div><i class="material-icons">assistant_photo</i>${key} <button class="btn btn-floating btn-small waves-effect"><i class="material-icons addStoneButton" data-map="${roadName},${key}">add</i></button></div>
         `;
-        roadMap.querySelector(`.addStoneButton`).addEventListener('click',createMileStoneModal)
     }
-    )
+            );
+    roadMap.querySelectorAll('.addStoneButton').forEach(item=>item.addEventListener('click',createMileStoneModal))
+
 }
 
 
